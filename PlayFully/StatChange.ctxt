@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.params=yourStat\ yourValue
+comment0.target=StatChange(Stat,\ int)
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ statChange\r\n
+comment1.params=
+comment1.target=int\ getValue()
+comment2.params=value
+comment2.target=void\ setValue(int)
+comment3.params=
+comment3.target=Stat\ getStat()
+comment4.params=yourStat
+comment4.target=void\ setStat(Stat)
+comment5.params=
+comment5.target=void\ apply()
+comment6.params=bonus
+comment6.target=void\ apply(int)
+comment7.params=
+comment7.target=java.lang.String\ toString()
+numComments=8
