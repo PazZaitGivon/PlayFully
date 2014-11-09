@@ -50,7 +50,7 @@ public class Stat//a class is a way of organising data so you can acess it more 
     private int daysToDecay;
     private int decayRate;//if 0 wont decay, also if decay const is 0 and static wont decay
     private int decayConst;// if 0 wont decay
-    private int decaysInARow;// we dont need this; will fix later
+    //private int decaysInARow;// we dont need this; will fix later
     private boolean staticDecay;//true means decays in a row doesnt matter except for statistics, and decayConst doesnt change, doesnt decay more each time
     private int lvlUpConst; //(static?)
     Stat overStat; //Math is a part of Academics NOT IMPLEMENTED
@@ -63,7 +63,7 @@ public class Stat//a class is a way of organising data so you can acess it more 
    //to implament the counters for different stats, the how many stats per person can be done more easily in a person class
    
 //this is my beautiful test function! isnt it lovely?
-    public static void test()
+    public static void main(String ...args)
     {
         Scanner in=new Scanner(System.in);
         System.out.println("enter the name of your new stat");
@@ -93,7 +93,7 @@ public class Stat//a class is a way of organising data so you can acess it more 
                if(in.hasNextInt())
               { test1.addValue(in.nextInt());}
               else
-              {System.out.println("sorry couldnt understand you, only whole numbers are allowed");}
+              {System.out.println("sorry couldn't understand you, only whole numbers are allowed");}
                in.nextLine();
                System.out.println("new exp is:"+test1.getPoints()+"/"+test1.getTotalPointsToNextLevel()+" to get to level "+(test1.getLvl()+1));
            }
@@ -157,7 +157,7 @@ public class Stat//a class is a way of organising data so you can acess it more 
     
        public Stat(String name, String desc)
     {
-       this(name, desc, 0, 0, false, 100,null,null);
+       this(name, desc, 0, 1, false, 100,null,null);
     }  
      
     public String getName()//tested
@@ -202,8 +202,8 @@ public class Stat//a class is a way of organising data so you can acess it more 
     public void setDecayConst(int newDecay)
     {this.decayConst=newDecay;}
    
-    public int getDecaysInARow()
-    {return decaysInARow;}
+    //public int getDecaysInARow()
+    //{return decaysInARow;}
    
     public boolean getStaticDecay()
     {return staticDecay;}
@@ -232,6 +232,7 @@ public class Stat//a class is a way of organising data so you can acess it more 
             System.out.println("yesterdayCounter : "+todayCounter);
             decay();
             dayCounter=0;
+            //if daycounter<0 --
         }
         else
         {
@@ -246,7 +247,7 @@ public class Stat//a class is a way of organising data so you can acess it more 
     protected void addValue(int modifier)
     {
         todayCounter=todayCounter+modifier;
-        decaysInARow=0;
+        //decaysInARow=0;
         if(points+modifier>=this.getTotalPointsToNextLevel())
             {   points=points+modifier-this.getTotalPointsToNextLevel();
                 level++;
@@ -275,34 +276,44 @@ public class Stat//a class is a way of organising data so you can acess it more 
         int TotalPoints=points;
         for(int tempLvl=level; tempLvl>0; tempLvl--)
         {
-            points=points+(tempLvl*lvlUpConst);
+            TotalPoints=points+(tempLvl*lvlUpConst);
         }
-        return points;
+        return TotalPoints;
     }
       
     protected void decay()
     {
-        if(this.daysToDecay==1)
+        if(this.daysToDecay==0)
         {
             int lost;
-            if(this.staticDecay)
-            {this.points=this.points-this.decayConst;
-            lost=decayConst;}
+
+            if(this.dayCounter>0)
+                {this.dayCounter=0;}
             else
-            {this.points=this.points-this.decayConst*decaysInARow;
-            lost=decayConst*decaysInARow;}// 1,2,3 or 2,4,6 etc 
+                {this.dayCounter--;}
+            if(this.staticDecay)
+            {
+                lost=decayConst;
+                this.points=this.points-lost;
+            }
+            else
+            {
+                lost=this.decayConst*(this.dayCounter-1);
+                this.points=this.points+lost;
+
+            }// 1,2,3 or 2,4,6 etc
             this.daysToDecay=this.decayRate;
-            this.decaysInARow++;
+
             
             if(points<0 && level > 0)
             {points=points+level*lvlUpConst;
             level--;}
             
-            System.out.println("You lost "+lost+" point(s) in "+name+" you now have "+points+"/"+this.getTotalPointsToNextLevel()+" to get to level "+(this.getLvl()+1)+" please try not to neglect "+name+" so much in the future");
-            System.out.println("you have decayed "+decaysInARow+" times in a row!");
+            System.out.println("You lost "+(-lost)+" point(s) in "+name+" you now have "+points+"/"+this.getTotalPointsToNextLevel()+" to get to level "+(this.getLvl()+1)+" please try not to neglect "+name+" so much in the future");
+            System.out.println("you have decayed "+(0-dayCounter)+" times in a row!");
         }//or should decaying speed up?
         else {
-        if(this.daysToDecay!=0)
+        if(this.daysToDecay>0)
         {this.daysToDecay--;}}
     }
     
